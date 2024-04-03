@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'client', 'src', 'index.jsx'),
+  entry: path.resolve(__dirname, 'client', 'src', 'index.tsx'),  // Changed to .tsx if it's a TypeScript file
 
   output: {
     path: path.resolve(__dirname, 'client', 'dist'),
@@ -12,20 +12,23 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        // Updated test to include .ts and .tsx files
+        test: /\.(ts|tsx|js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
+            // Ensure @babel/preset-typescript is included
+            presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript']
           }
         }
       },
     ]
   },
 
+  // Updated resolve.extensions to include .ts and .tsx
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
 
   plugins: [
@@ -33,6 +36,4 @@ module.exports = {
       template: path.resolve(__dirname, 'client', 'src', 'index.html')
     })
   ],
-
-
 };

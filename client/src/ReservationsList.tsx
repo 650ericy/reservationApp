@@ -2,24 +2,42 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import PurchaseForm from './PurchaseForm';
 
-const ReservationsList = ({ reservations, fetchReservations }) => {
-  const [selectedReservation, setSelectedReservation] = useState(null);
+type Reservation = {
+  reservationid: number;
+  restaurant_name: string;
+  name: string;
+  date: string;
+  time: string;
+  price: string;
+  numberofpeople: number;
+};
 
-  // No need to fetch reservations inside the component
+// Define the structure of the object you're sending on purchase.
+// Update this type according to your actual data structure.
+type PurchaseData = {
+  reservationId: number;
+  email: string;
+  creditCardInfo: string;
+  specialRequests: string;
+};
 
-  // Handle click on "Purchase Now" button
-  const handlePurchaseClick = (reservationId) => {
+type ReservationsListProps = {
+  reservations: Reservation[];
+  fetchReservations: () => void;
+};
+
+const ReservationsList: React.FC<ReservationsListProps> = ({ reservations, fetchReservations }) => {
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+
+  const handlePurchaseClick = (reservationId: number): void => {
     const reservationData = reservations.find(res => res.reservationid === reservationId);
-    setSelectedReservation(reservationData);
+    setSelectedReservation(reservationData || null);
   };
 
-  // Handle the purchase process
-  const handlePurchase = (purchaseData) => {
+  const handlePurchase = (purchaseData: PurchaseData): void => {
     axios.post('/create-transaction', purchaseData)
       .then(() => {
-        if (fetchReservations) {
-          fetchReservations(); // Refresh the reservations list if function provided
-        }
+        fetchReservations(); // Refresh the reservations list
         setSelectedReservation(null); // Close the purchase form
       })
       .catch(error => {

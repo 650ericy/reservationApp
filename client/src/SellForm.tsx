@@ -1,8 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 
-const SellForm = ({ restaurants, onReservationSubmit }) => {
-  const [formData, setFormData] = useState({
+// Define the type for a single restaurant
+type Restaurant = {
+  restaurantid: number;
+  name: string;
+  // Add other necessary fields...
+};
+
+// Define the props type for the component
+type SellFormProps = {
+  restaurants: Restaurant[];
+  onReservationSubmit: () => void;
+};
+
+// Define the type for the form data state
+type FormDataState = {
+  restaurantId: string;
+  name: string;
+  date: string;
+  time: string;
+  price: string;
+  numberOfPeople: string;
+  email: string;
+};
+
+const SellForm: React.FC<SellFormProps> = ({ restaurants, onReservationSubmit }) => {
+  const [formData, setFormData] = useState<FormDataState>({
     restaurantId: '',
     name: '',
     date: '',
@@ -12,18 +36,20 @@ const SellForm = ({ restaurants, onReservationSubmit }) => {
     email: '',
   });
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<File | null>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImage(e.target.files[0]);
+    }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formDataToSend = new FormData();
@@ -39,13 +65,13 @@ const SellForm = ({ restaurants, onReservationSubmit }) => {
     }
 
     try {
-      const response = await axios.post('/sell', formDataToSend, {
+      await axios.post('/sell', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       alert('Reservation added successfully!');
-      if (onReservationSubmit) onReservationSubmit();
+      onReservationSubmit(); // Invoke the callback after successful submission
     } catch (error) {
       console.error('Error submitting reservation:', error);
       alert('Failed to submit reservation.');

@@ -1,6 +1,20 @@
 import React from 'react';
 
-const RestaurantsList = ({ restaurants }) => {
+// Define the type for a single restaurant
+type Restaurant = {
+  restaurantid: number;
+  name: string;
+  location: string;
+  starrating: number;
+  cuisine: string;
+};
+
+// Define the props type for the component
+type RestaurantsListProps = {
+  restaurants: Restaurant[];
+};
+
+const RestaurantsList: React.FC<RestaurantsListProps> = ({ restaurants }) => {
   return (
     <div>
       <h2>Restaurant List:</h2>

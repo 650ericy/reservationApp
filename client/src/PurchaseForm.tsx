@@ -1,18 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import axios from 'axios';
 
-const PurchaseForm = ({ reservation, onPurchase, onClose }) => {
+type Reservation = {
+  reservationid: number;
+  restaurant_name: string;
+  date: string;
+  time: string;
+  price: string;
+  numberofpeople: number;
+};
+
+type PurchaseFormProps = {
+  reservation: Reservation;
+  onPurchase: (purchaseData: any) => void; // Replace 'any' with a proper type definition for your purchase data
+  onClose: () => void;
+};
+
+const PurchaseForm: React.FC<PurchaseFormProps> = ({ reservation, onPurchase, onClose }) => {
   const [email, setEmail] = useState('');
   const [creditCardInfo, setCreditCardInfo] = useState('');
   const [specialRequests, setSpecialRequests] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onPurchase({
       reservationId: reservation.reservationid,
       email: email,
       creditCardInfo: creditCardInfo,
-      specialRequests: specialRequests  // Include specialRequests in the purchase data
+      specialRequests: specialRequests,
     });
   };
 
