@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Define the type for a single restaurant
 type Restaurant = {
   restaurantid: number;
   name: string;
@@ -9,7 +8,6 @@ type Restaurant = {
   cuisine: string;
 };
 
-// Define the props type for the component
 type RestaurantsListProps = {
   restaurants: Restaurant[];
 };

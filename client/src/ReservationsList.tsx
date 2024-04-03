@@ -12,8 +12,6 @@ type Reservation = {
   numberofpeople: number;
 };
 
-// Define the structure of the object you're sending on purchase.
-// Update this type according to your actual data structure.
 type PurchaseData = {
   reservationId: number;
   email: string;
@@ -37,8 +35,8 @@ const ReservationsList: React.FC<ReservationsListProps> = ({ reservations, fetch
   const handlePurchase = (purchaseData: PurchaseData): void => {
     axios.post('/create-transaction', purchaseData)
       .then(() => {
-        fetchReservations(); // Refresh the reservations list
-        setSelectedReservation(null); // Close the purchase form
+        fetchReservations();
+        setSelectedReservation(null);
       })
       .catch(error => {
         console.error('Error creating transaction:', error);
@@ -70,7 +68,7 @@ const ReservationsList: React.FC<ReservationsListProps> = ({ reservations, fetch
               <td>{reservation.name}</td>
               <td>{new Date(reservation.date).toLocaleDateString("en-US")}</td>
               <td>{reservation.time}</td>
-              <td>{reservation.price}</td>
+              <td>${reservation.price}</td> {/* Modified line to include a dollar sign */}
               <td>{reservation.numberofpeople}</td>
               <td><button onClick={() => handlePurchaseClick(reservation.reservationid)}>Purchase Now</button></td>
             </tr>

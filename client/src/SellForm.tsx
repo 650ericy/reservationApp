@@ -1,20 +1,18 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 
-// Define the type for a single restaurant
 type Restaurant = {
   restaurantid: number;
   name: string;
-  // Add other necessary fields...
+
 };
 
-// Define the props type for the component
+// define prop types
 type SellFormProps = {
   restaurants: Restaurant[];
   onReservationSubmit: () => void;
 };
 
-// Define the type for the form data state
 type FormDataState = {
   restaurantId: string;
   name: string;
@@ -26,7 +24,7 @@ type FormDataState = {
 };
 
 const SellForm: React.FC<SellFormProps> = ({ restaurants, onReservationSubmit }) => {
-  const [formData, setFormData] = useState<FormDataState>({
+  const initialFormData: FormDataState = {
     restaurantId: '',
     name: '',
     date: '',
@@ -34,8 +32,9 @@ const SellForm: React.FC<SellFormProps> = ({ restaurants, onReservationSubmit })
     price: '',
     numberOfPeople: '',
     email: '',
-  });
+  };
 
+  const [formData, setFormData] = useState<FormDataState>(initialFormData);
   const [image, setImage] = useState<File | null>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -71,7 +70,9 @@ const SellForm: React.FC<SellFormProps> = ({ restaurants, onReservationSubmit })
         },
       });
       alert('Reservation added successfully!');
-      onReservationSubmit(); // Invoke the callback after successful submission
+      setFormData(initialFormData); // reset form
+      setImage(null); // reset image
+      if (onReservationSubmit) onReservationSubmit();
     } catch (error) {
       console.error('Error submitting reservation:', error);
       alert('Failed to submit reservation.');

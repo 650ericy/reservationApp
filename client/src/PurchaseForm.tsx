@@ -12,7 +12,7 @@ type Reservation = {
 
 type PurchaseFormProps = {
   reservation: Reservation;
-  onPurchase: (purchaseData: any) => void; // Replace 'any' with a proper type definition for your purchase data
+  onPurchase: (purchaseData: any) => void;
   onClose: () => void;
 };
 

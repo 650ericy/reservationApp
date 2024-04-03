@@ -8,13 +8,12 @@ const App = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [reservations, setReservations] = useState([]);
 
-  // Fetching restaurants and reservations on component mount
+  // fetch n mount
   useEffect(() => {
     fetchRestaurants();
     fetchReservations();
   }, []);
 
-  // Function to fetch restaurants
   const fetchRestaurants = async () => {
     try {
       const response = await axios.get('/restaurants');
@@ -24,7 +23,6 @@ const App = () => {
     }
   };
 
-  // Function to fetch reservations
   const fetchReservations = async () => {
     try {
       const response = await axios.get('/reservations');
@@ -34,8 +32,6 @@ const App = () => {
     }
   };
 
-  // The SellForm component is passed the restaurants and a callback function to trigger after a reservation is added
-  // The ReservationsList component is passed the current reservations and the fetch function to allow refreshing the list
   return (
     <div>
       <h1>Michelin Star Restaurants in SF</h1>
