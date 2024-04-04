@@ -33,12 +33,18 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Michelin Star Restaurants in SF</h1>
-      <SellForm restaurants={restaurants} onReservationSubmit={fetchReservations} />
-      <ReservationsList reservations={reservations} fetchReservations={fetchReservations} />
-      <RestaurantsList restaurants={restaurants} />
+    <div className="container mx-auto p-4">
+    <h1 className="text-2xl font-bold text-center my-4">Michelin Star Restaurants in SF</h1>
+    <div className="flex flex-col md:flex-row md:-mx-2">
+      <div className="md:w-1/2 md:px-2">
+        <SellForm restaurants={restaurants} onReservationSubmit={fetchReservations} />
+      </div>
+      <div className="md:w-1/2 md:px-2 mt-4 md:mt-0">
+        <ReservationsList reservations={reservations} fetchReservations={fetchReservations} />
+      </div>
     </div>
+    <RestaurantsList restaurants={restaurants} />
+  </div>
   );
 };
 

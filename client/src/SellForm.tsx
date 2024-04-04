@@ -80,48 +80,133 @@ const SellForm: React.FC<SellFormProps> = ({ restaurants, onReservationSubmit })
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Restaurant:
-        <select name="restaurantId" value={formData.restaurantId} onChange={handleChange} required>
-          <option value="">Select a restaurant</option>
-          {restaurants.map((restaurant) => (
-            <option key={restaurant.restaurantid} value={restaurant.restaurantid}>
-              {restaurant.name}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Name:
-        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" required />
-      </label>
-      <label>
-        Date:
-        <input type="date" name="date" value={formData.date} onChange={handleChange} required />
-      </label>
-      <label>
-        Time:
-        <input type="time" name="time" value={formData.time} onChange={handleChange} required />
-      </label>
-      <label>
-        Price:
-        <input type="number" name="price" value={formData.price} onChange={handleChange} required />
-      </label>
-      <label>
-        Number of People:
-        <input type="number" name="numberOfPeople" value={formData.numberOfPeople} onChange={handleChange} required />
-      </label>
-      <label>
-        Email:
-        <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-      </label>
-      <label>
-        Upload Image:
-        <input type="file" onChange={handleImageChange} />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto">
+  <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="restaurantId">
+      Restaurant:
+      <select
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        id="restaurantId"
+        name="restaurantId"
+        value={formData.restaurantId}
+        onChange={handleChange}
+        required
+      >
+        <option value="">Select a restaurant</option>
+        {restaurants.map((restaurant) => (
+          <option key={restaurant.restaurantid} value={restaurant.restaurantid}>
+            {restaurant.name}
+          </option>
+        ))}
+      </select>
+    </label>
+  </div>
+  <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+      Your Name:
+      <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="name"
+        name="name"
+        type="text"
+        placeholder="Your Name"
+        value={formData.name}
+        onChange={handleChange}
+        required
+      />
+    </label>
+  </div>
+  <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
+      Date:
+      <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="date"
+        name="date"
+        type="date"
+        value={formData.date}
+        onChange={handleChange}
+        required
+      />
+    </label>
+  </div>
+  <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="time">
+      Time:
+      <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="time"
+        name="time"
+        type="time"
+        value={formData.time}
+        onChange={handleChange}
+        required
+      />
+    </label>
+  </div>
+  <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="price">
+      Price:
+      <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="price"
+        name="price"
+        type="number"
+        value={formData.price}
+        onChange={handleChange}
+        required
+      />
+    </label>
+  </div>
+  <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="numberOfPeople">
+      Number of People:
+      <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="numberOfPeople"
+        name="numberOfPeople"
+        type="number"
+        value={formData.numberOfPeople}
+        onChange={handleChange}
+        required
+      />
+    </label>
+  </div>
+  <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+      Email:
+      <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="email"
+        name="email"
+        type="email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+      />
+    </label>
+  </div>
+  <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+      Upload Image:
+      <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="image"
+        name="image"
+        type="file"
+        onChange={handleImageChange}
+      />
+    </label>
+  </div>
+  <div className="flex items-center justify-between">
+    <button
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      type="submit"
+    >
+      Submit
+    </button>
+  </div>
+</form>
   );
 };
 
