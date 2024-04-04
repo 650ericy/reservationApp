@@ -10,9 +10,16 @@ type Reservation = {
   numberofpeople: number;
 };
 
+type PurchaseData = {
+  reservationId: number;
+  email: string;
+  creditCardInfo: string;
+  specialRequests: string;
+};
+
 type PurchaseFormProps = {
   reservation: Reservation;
-  onPurchase: (purchaseData: any) => void;
+  onPurchase: (purchaseData: PurchaseData) => void;
   onClose: () => void;
 };
 

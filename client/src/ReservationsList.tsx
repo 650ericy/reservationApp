@@ -10,6 +10,7 @@ type Reservation = {
   time: string;
   price: string;
   numberofpeople: number;
+  isPurchased: boolean;
 };
 
 type PurchaseData = {
@@ -21,10 +22,11 @@ type PurchaseData = {
 
 type ReservationsListProps = {
   reservations: Reservation[];
+  setReservations: React.Dispatch<React.SetStateAction<Reservation[]>>;
   fetchReservations: () => void;
 };
 
-const ReservationsList: React.FC<ReservationsListProps> = ({ reservations, fetchReservations }) => {
+const ReservationsList: React.FC<ReservationsListProps> = ({ reservations, setReservations, fetchReservations }) => {
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
 
   const handlePurchaseClick = (reservationId: number): void => {
@@ -35,8 +37,8 @@ const ReservationsList: React.FC<ReservationsListProps> = ({ reservations, fetch
   const handlePurchase = (purchaseData: PurchaseData): void => {
     axios.post('/create-transaction', purchaseData)
       .then(() => {
-        // After a successful purchase, refresh the reservations list
-        fetchReservations();
+        const updatedReservations = reservations.filter(res => res.reservationid !== purchaseData.reservationId);
+        setReservations(updatedReservations);
         setSelectedReservation(null);
       })
       .catch(error => {
@@ -44,62 +46,57 @@ const ReservationsList: React.FC<ReservationsListProps> = ({ reservations, fetch
         alert('Failed to create transaction.');
       });
   };
-  return (
-<div className="overflow-auto max-h-[500px]">
-  <h1>Reservations</h1>
-  <div className="min-w-full">
-    <table className="table-auto border-collapse w-full">
-      <thead>
-        <tr className="bg-gray-100">
-          <th className="p-3 text-xs font-semibold tracking-wide text-left">Reservation ID</th>
-          <th className="p-3 text-xs font-semibold tracking-wide text-left">Restaurant Name</th>
-          <th className="p-3 text-xs font-semibold tracking-wide text-left">Name</th>
-          <th className="p-3 text-xs font-semibold tracking-wide text-left">Date</th>
-          <th className="p-3 text-xs font-semibold tracking-wide text-left">Time</th>
-          <th className="p-3 text-xs font-semibold tracking-wide text-left">Price</th>
-          <th className="p-3 text-xs font-semibold tracking-wide text-left">Number of People</th>
-          <th className="p-3 text-xs font-semibold tracking-wide text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody className="text-sm divide-y divide-gray-100">
-        {reservations.map((reservation) => {
-          const formattedDate = new Date(reservation.date).toLocaleDateString("en-US", {
-            year: 'numeric', month: 'numeric', day: 'numeric'
-          }) || "Invalid Date";
-          const formattedTime = reservation.time ? new Date('1970-01-01T' + reservation.time + 'Z')
-            .toLocaleTimeString("en-US", { timeStyle: "short", hour12: true, timeZone: 'UTC' }) : "";
 
-          return (
-            <tr key={reservation.reservationid} className="text-gray-700">
-              <td className="p-3">{reservation.reservationid}</td>
-              <td className="p-3">{reservation.restaurant_name}</td>
-              <td className="p-3">{reservation.name}</td>
-              <td className="p-3">{formattedDate}</td>
-              <td className="p-3">{formattedTime}</td>
-              <td className="p-3">${reservation.price}</td>
-              <td className="p-3">{reservation.numberofpeople}</td>
-              <td className="p-3">
-                <button
-                  onClick={() => handlePurchaseClick(reservation.reservationid)}
-                  className="text-white bg-blue-500 hover:bg-blue-700 font-semibold py-2 px-4 border border-blue-700 rounded shadow"
-                >
-                  Purchase Now
-                </button>
-              </td>
+  return (
+    <div className="overflow-auto max-h-[500px]">
+      <h1>Reservations</h1>
+      <div className="min-w-full">
+        <table className="table-auto border-collapse w-full">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="p-3 text-xs font-semibold tracking-wide text-left">Reservation ID</th>
+              <th className="p-3 text-xs font-semibold tracking-wide text-left">Restaurant Name</th>
+              <th className="p-3 text-xs font-semibold tracking-wide text-left">Name</th>
+              <th className="p-3 text-xs font-semibold tracking-wide text-left">Date</th>
+              <th className="p-3 text-xs font-semibold tracking-wide text-left">Time</th>
+              <th className="p-3 text-xs font-semibold tracking-wide text-left">Price</th>
+              <th className="p-3 text-xs font-semibold tracking-wide text-left">Number of People</th>
+              <th className="p-3 text-xs font-semibold tracking-wide text-left">Action</th>
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  </div>
-  {selectedReservation && (
-    <PurchaseForm
-      reservation={selectedReservation}
-      onPurchase={handlePurchase}
-      onClose={() => setSelectedReservation(null)}
-    />
-  )}
-</div>
+          </thead>
+          <tbody className="text-sm divide-y divide-gray-100">
+            {reservations.filter(res => !res.isPurchased).map((reservation) => {
+              const formattedDate = new Date(reservation.date).toLocaleDateString("en-US");
+              const formattedTime = new Date('1970-01-01T' + reservation.time + 'Z').toLocaleTimeString("en-US", { hour: 'numeric', minute: 'numeric', hour12: true });
+
+              return (
+                <tr key={reservation.reservationid} className="text-gray-700">
+                  <td className="p-3">{reservation.reservationid}</td>
+                  <td className="p-3">{reservation.restaurant_name}</td>
+                  <td className="p-3">{reservation.name}</td>
+                  <td className="p-3">{formattedDate}</td>
+                  <td className="p-3">{formattedTime}</td>
+                  <td className="p-3">${reservation.price}</td>
+                  <td className="p-3">{reservation.numberofpeople}</td>
+                  <td className="p-3">
+                    <button onClick={() => handlePurchaseClick(reservation.reservationid)} className="text-white bg-blue-500 hover:bg-blue-700 font-semibold py-2 px-4 border border-blue-700 rounded shadow">
+                      Purchase Now
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      {selectedReservation && (
+        <PurchaseForm
+          reservation={selectedReservation}
+          onPurchase={handlePurchase}
+          onClose={() => setSelectedReservation(null)}
+        />
+      )}
+    </div>
   );
 };
 
